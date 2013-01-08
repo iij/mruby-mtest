@@ -394,7 +394,7 @@ module MTest
         $asserts << "MTest #{i+1}) #{msg}"
       end
 
-      self.class.reset
+      TestCase.reset
     end
 
     def _run args = []
