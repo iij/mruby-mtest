@@ -55,6 +55,4 @@ class Test4MTest < MTest::Unit::TestCase
   end
 end
 
-assert('Test4Mtest') do
-  MTest::Unit.new.run == 0
-end
+MTest::Unit.new.mrbtest

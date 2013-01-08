@@ -376,8 +376,30 @@ module MTest
       self.class.runner._run(args)
     end
 
+    def mrbtest
+      suites = TestCase.send "test_suites"
+      return if suites.empty?
+
+      @test_cound, @assertion_count = 0, 0
+
+      results = _run_suites suites
+
+      @test_count      = results.map{ |r| r[0] }.inject(0) { |sum, tc| sum + tc }
+      @assertion_count = results.map{ |r| r[1] }.inject(0) { |sum, ac| sum + ac }
+
+      $ok_test += (test_count.to_i - failures.to_i - errors.to_i - skips.to_i)
+      $ko_test += failures.to_i
+      $kill_test += errors.to_i
+      report.each_with_index do |msg, i|
+        $asserts << "MTest #{i+1}) #{msg}"
+      end
+
+      self.class.reset
+    end
+
     def _run args = []
       _run_tests
+      @test_count ||= 0
       @test_count > 0 ? failures + errors : nil
     end
 
