@@ -8,3 +8,4 @@ gem_mixlib.c
 gem_mrblib.c
 gem_srclib.c
 .*.swp
+/tmp
