@@ -474,6 +474,65 @@ module MTest
 
       @@test_suites = {}
 
+      def verify_call_count
+        failure = []
+        $_mruby_mock_expectations.each do |k, v|
+          v.each do |method, expectation|
+
+            if expectation[:times] && expectation[:times] != expectation[:history].size
+              msg = "  unexpected invocation:\n"
+              msg += "    \"#{k.inspect}.#{method}\" was not invoked with the expected number of invocation\n"
+              msg += "      expected: #{expectation[:times]}\n"
+              msg += "        actual: #{expectation[:history].size}\n"
+              failure << msg
+              next
+            elsif expectation[:minimum_number] && expectation[:minimum_number] > expectation[:history].size
+              msg = "  unexpected invocation:\n"
+              msg += "    \"#{k.inspect}.#{method}\" was not invoked with the expected number of invocation\n"
+              msg += "      expected: at least #{expectation[:minimum_number]}\n"
+              msg += "        actual: #{expectation[:history].size}\n"
+              failure << msg
+              next
+            elsif expectation[:maximum_number] && expectation[:maximum_number] < expectation[:history].size
+              msg = "  unexpected invocation:\n"
+              msg += "    \"#{k.inspect}.#{method}\" was not invoked with the expected number of invocation\n"
+              msg += "      expected: at most #{expectation[:maximum_number]}\n"
+              msg += "        actual: #{expectation[:history].size}\n"
+              failure << msg
+              next
+            end
+
+          end
+        end
+
+        unless failure.empty?
+          $_mruby_mock_test_failure ||= []
+          $_mruby_mock_test_failure << failure.join
+        end
+      end
+
+      def verify_args
+        failure = []
+        $_mruby_mock_expectations.each do |k, v|
+          v.each do |method, expectation|
+            expectation[:history].each do |invoked|
+              unless invoked[:expected_args]
+                msg = "  unexpected invocation:\n"
+                msg += "    #{k.inspect} invoked \"#{method}\" with unexpected arguments \n"
+                msg += "      expected: (#{expectation[:with]})\n"
+                msg += "       acutual: (#{invoked[:args]})\n"
+              end
+              failure << msg if msg
+            end
+          end
+        end
+
+        unless failure.empty?
+          $_mruby_mock_test_failure ||= []
+          $_mruby_mock_test_failure << failure.join
+        end
+      end
+
       def run runner
         result = ""
         begin
@@ -481,12 +540,19 @@ module MTest
           self.setup
           self.run_setup_hooks
           self.__send__ self.__name__
+
+          verify_call_count
+          verify_args
+          raise MTest::Assertion, $_mruby_mock_test_failure.unshift("\n").join unless $_mruby_mock_test_failure.empty?
+
           result = "." unless io?
           @passed = true
         rescue Exception => e
           @passed = false
           result = runner.puke self.class, self.__name__, e
         ensure
+          $_mruby_mock_expectations = { }
+          $_mruby_mock_test_failure = []
           begin
             self.run_teardown_hooks
             self.teardown
