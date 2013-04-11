@@ -30,7 +30,7 @@ if Object.const_defined?(:MTest)
     end
 
     def test_assert_includes
-      assert_includes([1,2,3], 1)
+      assert_include([1,2,3], 1)
     end
 
     def test_assert_instance_of

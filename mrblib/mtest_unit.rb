@@ -103,7 +103,7 @@ module MTest
     ##
     # Fails unless +collection+ includes +obj+.
 
-    def assert_includes collection, obj, msg = nil
+    def assert_include collection, obj, msg = nil
       msg = message(msg) {
         "Expected #{mu_pp(collection)} to include #{mu_pp(obj)}"
       }
@@ -185,33 +185,29 @@ module MTest
     ##
     # Fails unless the block raises one of +exp+
 
-    def assert_raises *exp
+    def assert_raise *exp
       msg = "#{exp.pop}\n" if String === exp.last
 
-      should_raise = false
       begin
         yield
-        should_raise = true
-      rescue MiniTest::Skip => e
-        details = "#{msg}#{mu_pp(exp)} exception expected, not"
-
-        if exp.include? MiniTest::Skip then
-          return e
-        else
-          raise e
-        end
+      rescue MTest::Skip => e
+        return e if exp.include? MTest::Skip
+        raise e
       rescue Exception => e
-        details = "#{msg}#{mu_pp(exp)} exception expected, not"
-        assert(exp.any? { |ex|
-                 ex.instance_of?(Module) ? e.kind_of?(ex) : ex == e.class
-               }, exception_details(e, details))
+        excepted = exp.any? do |ex|
+          if ex.instance_of?(Module)
+            e.kind_of?(ex)
+          else
+            e.instance_of?(ex)
+          end
+        end
+
+        assert excepted, exception_details(e, "#{msg}#{mu_pp(exp)} exception expected, not")
 
         return e
       end
-
       exp = exp.first if exp.size == 1
-      flunk "#{msg}#{mu_pp(exp)} expected but nothing was raised." if
-        should_raise
+      flunk "#{msg}#{mu_pp(exp)} expected but nothing was raised."
     end
 
     ##
@@ -300,9 +296,35 @@ module MTest
     # Skips the current test. Gets listed at the end of the run but
     # doesn't cause a failure exit code.
 
-    def skip msg = nil, bt = caller
+    # disable backtrace for mruby
+
+    def skip msg = nil
       msg ||= "Skipped, no message given"
-      raise MTest::Skip, msg, bt
+      raise MTest::Skip, msg
+    end
+
+    ##
+    # Returns details for exception +e+
+
+    # disable backtrace for mruby
+
+    def exception_details e, msg
+      [
+       "#{msg}",
+       "Class: <#{e.class}>",
+       "Message: <#{e.message.inspect}>",
+#       "---Backtrace---",
+#       "#{MiniTest::filter_backtrace(e.backtrace).join("\n")}",
+#       "---------------",
+      ].join "\n"
+    end
+
+    ##
+    # Fails with +msg+
+
+    def flunk msg = nil
+      msg ||= "Epic Fail!"
+      assert false, msg
     end
 
   end
