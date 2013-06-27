@@ -73,6 +73,15 @@ module MTest
     end
 
     ##
+    # Fails +obj+ is not empty.
+
+    def assert_not_empty obj, msg = nil
+      msg = message(msg) { "Expected #{mu_pp(obj)} to be not empty" }
+      assert_respond_to obj, :empty?
+      assert !obj.empty?, msg
+    end
+
+    ##
     # Fails unless <tt>exp == act</tt> printing the difference between
     # the two, if possible.
     #
