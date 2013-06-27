@@ -26,7 +26,6 @@ if Object.const_defined?(:MTest)
 
     def test_assert_equal
       assert_equal('', nil.to_s)
-      assert_not_equal('', nil.to_s)
       assert_not_equal('a', nil.to_s)
     end
 
