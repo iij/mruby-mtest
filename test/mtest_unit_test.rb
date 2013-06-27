@@ -7,6 +7,9 @@ if Object.const_defined?(:MTest)
     def test_assert
       assert(true)
       assert(true, 'true sample test')
+      assert_true(true)
+      assert_false(false)
+      assert_nil(nil)
     end
 
     def test_assert_block
@@ -23,13 +26,15 @@ if Object.const_defined?(:MTest)
 
     def test_assert_equal
       assert_equal('', nil.to_s)
+      assert_not_equal('', nil.to_s)
+      assert_not_equal('a', nil.to_s)
     end
 
     def test_assert_in_delta
       assert_in_delta(0, 0.1, 0.5)
     end
 
-    def test_assert_includes
+    def test_assert_include
       assert_include([1,2,3], 1)
     end
 

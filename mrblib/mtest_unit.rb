@@ -46,6 +46,15 @@ module MTest
       true
     end
 
+    alias assert_true assert
+
+    ##
+    # Fails unless +test+ is a false value
+    def assert_false test, msg = nil
+      msg = message(msg) { "Expected #{mu_pp(obj)} to be false" }
+      assert test == false, msg
+    end
+
     ##
     # Fails unless the block returns a true value.
 
@@ -81,6 +90,15 @@ module MTest
     end
 
     ##
+    # Fails exp == act
+    def assert_not_equal exp, act, msg = nil
+      msg = message(msg) {
+        "Expected #{mu_pp(exp)} to be not equal #{mu_pp(act)}"
+      }
+      assert(exp != act, msg)
+    end
+
+    ##
     # For comparing Floats.  Fails unless +exp+ and +act+ are within +delta+
     # of each other.
     #
@@ -109,6 +127,16 @@ module MTest
       }
       assert_respond_to collection, :include?
       assert collection.include?(obj), msg
+    end
+
+    ##
+    # Fails +collection+ includes +obj+
+    def assert_not_include collection, obj, msg = nil
+      msg = message(msg) {
+        "Expected #{mu_pp(collection)} to not include #{mu_pp(obj)}"
+      }
+      assert_respond_to collection, :include?
+      assert !collection.include?(obj), msg
     end
 
     ##
@@ -214,7 +242,7 @@ module MTest
     # Fails unless +obj+ responds to +meth+.
 
     def assert_respond_to obj, meth, msg = nil
-      msg = message(msg) {
+      msg = message(msg, '') {
         "Expected #{mu_pp(obj)} (#{obj.class}) to respond to ##{meth}"
       }
       assert obj.respond_to?(meth), msg
