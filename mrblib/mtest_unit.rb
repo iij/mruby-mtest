@@ -30,7 +30,8 @@ module MTest
     end
 
     def _assertions
-      @_assertions ||= 0
+      @_assertions = 0 unless @_assertions
+      @_assertions
     end
 
     ##
@@ -394,7 +395,8 @@ module MTest
     end
 
     def self.runner
-      @@runner ||= self.new
+      @@runner = self.new  unless @@runner
+      @@runner
     end
 
     def output
@@ -472,7 +474,7 @@ module MTest
       puts "# Running tests:"
       puts
 
-      @test_cound, @assertion_count = 0, 0
+      @test_count, @assertion_count = 0, 0
 
       results = _run_suites suites
 
