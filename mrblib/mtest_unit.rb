@@ -415,13 +415,13 @@ module MTest
       e = case e
           when MTest::Skip
             @skips += 1
-            "Skipped:\n#{meth}(#{klass}) #{e}\n"
+            "Skipped:\n#{meth}(#{klass}) #{e.inspect}\n"
           when MTest::Assertion
             @failures += 1
-            "Failure:\n#{meth}(#{klass}) #{e}\n"
+            "Failure:\n#{meth}(#{klass}) #{e.inspect}\n"
           else
             @errors += 1
-            "Error:\n#{meth}(#{klass}): #{e.class}, #{e}\n"
+            "Error:\n#{meth}(#{klass}): #{e.class}, #{e.inspect}\n"
           end
       @report << e
       e[0, 1]
