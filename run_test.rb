@@ -21,4 +21,6 @@ MRuby::Build.new do |conf|
   conf.gembox 'default'
 
   conf.gem File.expand_path(File.dirname(__FILE__))
+  conf.gem :core => 'mruby-time'
+  conf.gem :github => 'iij/mruby-io'
 end
