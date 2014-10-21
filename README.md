@@ -1,6 +1,8 @@
 Minimum Test Framework for mruby
 =========
 
+[![Build Status](https://travis-ci.org/iij/mruby-mtest.svg?branch=master)](https://travis-ci.org/iij/mruby-mtest)
+
 ## example
 ```ruby
 class Test4MTest < MTest::Unit::TestCase
