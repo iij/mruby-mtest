@@ -4,5 +4,5 @@ MRuby::Gem::Specification.new('mruby-mtest') do |spec|
 
   spec.add_dependency 'mruby-sprintf', core: 'mruby-sprintf'
   spec.add_dependency 'mruby-time', core: 'mruby-time'
-  spec.add_dependency 'mruby-io', core: 'mruby-io'
+  spec.add_dependency 'mruby-io', mgem: 'mruby-io'
 end
