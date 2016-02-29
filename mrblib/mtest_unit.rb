@@ -52,7 +52,7 @@ module MTest
     ##
     # Fails unless +test+ is a false value
     def assert_false test, msg = nil
-      msg = message(msg) { "Expected #{mu_pp(obj)} to be false" }
+      msg = message(msg) { "Expected #{mu_pp(test)} to be false" }
       assert test == false, msg
     end
 

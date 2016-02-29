@@ -50,6 +50,18 @@ if Object.const_defined?(:MTest)
     def test_assert_match
       assert_match 'abc', 'abc'
     end
+
+    def test_assert_raise
+      assert_raise(RuntimeError) do
+        raise
+      end
+    end
+
+    def test_assert_false_failure
+      assert_raise(MTest::Assertion) do
+        assert_false(true)
+      end
+    end
   end
 
   if $ok_test
