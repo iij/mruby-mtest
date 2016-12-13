@@ -441,12 +441,7 @@ module MTest
       suites = TestCase.send "test_suites"
       return if suites.empty?
 
-      @test_cound, @assertion_count = 0, 0
-
       results = _run_suites suites
-
-      @test_count      = results.map{ |r| r[0] }.inject(0) { |sum, tc| sum + tc }
-      @assertion_count = results.map{ |r| r[1] }.inject(0) { |sum, ac| sum + ac }
 
       $ok_test += (test_count.to_i - failures.to_i - errors.to_i - skips.to_i)
       $ko_test += failures.to_i
@@ -474,12 +469,7 @@ module MTest
       puts "# Running tests:"
       puts
 
-      @test_count, @assertion_count = 0, 0
-
       results = _run_suites suites
-
-      @test_count      = results.map{ |r| r[0] }.inject(0) { |sum, tc| sum + tc }
-      @assertion_count = results.map{ |r| r[1] }.inject(0) { |sum, ac| sum + ac }
 
       t = Time.now - start
 
@@ -498,7 +488,14 @@ module MTest
     end
 
     def _run_suites suites
-      suites.map { |suite| _run_suite suite }
+      @test_count, @assertion_count = 0, 0
+
+      results = suites.map { |suite| _run_suite suite }
+
+      @test_count      = results.map{ |r| r[0] }.inject(0) { |sum, tc| sum + tc }
+      @assertion_count = results.map{ |r| r[1] }.inject(0) { |sum, ac| sum + ac }
+
+      return results
     end
 
     def _run_suite suite
