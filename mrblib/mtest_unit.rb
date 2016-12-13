@@ -433,9 +433,15 @@ module MTest
       @verbose = false
     end
 
+    ##
+    # Runs tests and outputs minitest-style results
+
     def run args = []
       self.class.runner._run(args)
     end
+
+    ##
+    # Runs the tests and outputs mruby-test style results
 
     def mrbtest
       suites = TestCase.send "test_suites"

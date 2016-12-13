@@ -4,6 +4,7 @@ Minimum Test Framework for mruby
 [![Build Status](https://travis-ci.org/iij/mruby-mtest.svg?branch=master)](https://travis-ci.org/iij/mruby-mtest)
 
 ## example
+
 ```ruby
 class Test4MTest < MTest::Unit::TestCase
   def test_assert
@@ -15,7 +16,14 @@ end
 MTest::Unit.new.run
 ```
 
+This example outputs results in a format similar to minitest.
+
+You can also use `MTest::Unit.new.run` to get mruby-test style output.  It is
+OK to use minitest style output with mrbtest.  mruby-test will be notified of
+test runs with either method.
+
 ### How to use mrbgem's mrbtest
+
 ```ruby
 if Object.const_defined?(:MTest)
   class Test4MTest < MTest::Unit::TestCase
