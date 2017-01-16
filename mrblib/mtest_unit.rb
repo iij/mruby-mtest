@@ -412,16 +412,18 @@ module MTest
     end
 
     def puke klass, meth, e
+      # dirty hack to find the actual filename and line number that the assertion failed at
+      loc = e.backtrace.find(Proc.new {e.inspect}) {|l| !l.include?(':in MTest::')}
       e = case e
           when MTest::Skip
             @skips += 1
-            "Skipped:\n#{meth}(#{klass}) #{e.inspect}\n"
+            "Skipped:\n#{meth}(#{klass}) #{loc}\n"
           when MTest::Assertion
             @failures += 1
-            "Failure:\n#{meth}(#{klass}) #{e.inspect}\n"
+            "Failure:\n#{meth}(#{klass}) #{loc}\n"
           else
             @errors += 1
-            "Error:\n#{meth}(#{klass}): #{e.class}, #{e.inspect}\n"
+            "Error:\n#{meth}(#{klass}): #{e.class}, #{loc}\n"
           end
       @report << e
       e[0, 1]
