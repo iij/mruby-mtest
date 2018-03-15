@@ -430,7 +430,7 @@ module MTest
             "Failure:\n#{meth}(#{klass}) #{loc}\n"
           else
             @errors += 1
-            "Error:\n#{meth}(#{klass}): #{e.class}\n" + e.backtrace.map{|bt| "\t#{bt}\n" }.join
+            "Error:\n#{meth}(#{klass}): #{e.class}, #{e.message}\n" + e.backtrace.map{|bt| "\t#{bt}\n" }.join
           end
       @report << e
       e[0, 1]
