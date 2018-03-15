@@ -351,9 +351,9 @@ module MTest
        "#{msg}",
        "Class: <#{e.class}>",
        "Message: <#{e.message.inspect}>",
-#       "---Backtrace---",
-#       "#{MiniTest::filter_backtrace(e.backtrace).join("\n")}",
-#       "---------------",
+       "---Backtrace---",
+       "#{e.backtrace.join("\n")}",
+       "---------------",
       ].join "\n"
     end
 
