@@ -351,9 +351,9 @@ module MTest
        "#{msg}",
        "Class: <#{e.class}>",
        "Message: <#{e.message.inspect}>",
-#       "---Backtrace---",
-#       "#{MiniTest::filter_backtrace(e.backtrace).join("\n")}",
-#       "---------------",
+       "---Backtrace---",
+       "#{e.backtrace.join("\n")}",
+       "---------------",
       ].join "\n"
     end
 
@@ -430,7 +430,7 @@ module MTest
             "Failure:\n#{meth}(#{klass}) #{loc}\n"
           else
             @errors += 1
-            "Error:\n#{meth}(#{klass}): #{e.class}, #{loc}\n" + e.backtrace.map{|bt| "\t#{bt}\n" }.join
+            "Error:\n#{meth}(#{klass}): #{e.class}, #{e.message}\n" + e.backtrace.map{|bt| "\t#{bt}\n" }.join
           end
       @report << e
       e[0, 1]
