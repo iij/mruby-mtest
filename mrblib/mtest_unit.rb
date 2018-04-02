@@ -413,7 +413,7 @@ module MTest
 
     def puke klass, meth, e
       # dirty hack to find the actual filename and line number that the assertion failed at
-      loc = e.backtrace.find {|l| !l.include?(':in MTest::')}
+      loc = e.backtrace.find {|l| l.include?(meth)}
       if loc
         idx = loc.rindex(':in ') 
         loc = idx.nil? ? "#{loc}: #{e.message}" : "#{loc[0, idx]}: #{e.message} (#{e.class})"
