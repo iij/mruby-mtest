@@ -415,7 +415,7 @@ module MTest
       # dirty hack to find the actual filename and line number that the assertion failed at
       loc = e.backtrace.find {|l| l.include?(meth)}
       if loc
-        idx = loc.rindex(':in ') 
+        idx = loc.rindex(':in ')
         loc = idx.nil? ? "#{loc}: #{e.message}" : "#{loc[0, idx]}: #{e.message} (#{e.class})"
       else
         loc = e.inspect
@@ -430,7 +430,12 @@ module MTest
             "Failure:\n#{meth}(#{klass}) #{loc}\n"
           else
             @errors += 1
-            "Error:\n#{meth}(#{klass}): #{e.class}, #{e.message}\n" + e.backtrace.map{|bt| "\t#{bt}\n" }.join
+            bt = ""
+            e.backtrace.each { |l|
+              bt += "\t#{l}\n"
+              break if l.include?(":in "+meth)
+            }
+            "Error:\n#{meth}(#{klass}): #{e.class}, #{e.message}\n#{bt}"
           end
       @report << e
       e[0, 1]
@@ -709,6 +714,18 @@ if __FILE__ == $0
       puts '*test_sample'
       assert(true, 'true sample test')
       assert(true)
+    end
+
+    def test_skip
+      skip
+    end
+
+    def test_failure
+      assert(false, 'assertion to fail')
+    end
+
+    def test_error
+      1 + "a"
     end
   end
 
