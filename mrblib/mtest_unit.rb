@@ -390,8 +390,8 @@ module MTest
       @@out = stream
     end
 
-    def self.runnner= runner
-      @@runner = runnner
+    def self.runner= runner
+      @@runner = runner
     end
 
     def self.runner
