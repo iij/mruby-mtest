@@ -41,6 +41,18 @@ class Test4MTest < MTest::Unit::TestCase
   def test_assert_match
     assert_match 'abc', 'abc'
   end
+
+  def test_skip
+    skip 'explain why we skip the test'
+  end
+
+  def test_failure
+    assert(1 == 0, 'assertion to fail')
+  end
+
+  def test_error
+    1 + "a"
+  end
 end
 
 MTest::Unit.new.run
