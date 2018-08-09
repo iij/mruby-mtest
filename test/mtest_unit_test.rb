@@ -57,9 +57,29 @@ if Object.const_defined?(:MTest)
       end
     end
 
-    def test_assert_false_failure
+    def test_assert_false
+      assert_false(false)
+      assert_false(nil)
+
       assert_raise(MTest::Assertion) do
         assert_false(true)
+      end
+
+      assert_raise(MTest::Assertion) do
+        assert_false(1)
+      end
+    end
+
+    def test_assert_true
+      assert_true(true)
+      assert_true(1)
+
+      assert_raise(MTest::Assertion) do
+        assert_true(false)
+      end
+
+      assert_raise(MTest::Assertion) do
+        assert_true(nil)
       end
     end
   end

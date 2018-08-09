@@ -35,7 +35,7 @@ module MTest
     end
 
     ##
-    # Fails unless +test+ is a true value.
+    # Fails unless test is truthy.
 
     def assert test, msg = nil
       msg ||= "Failed assertion, no message given."
@@ -50,10 +50,10 @@ module MTest
     alias assert_true assert
 
     ##
-    # Fails unless +test+ is a false value
+    # Fails if test is truthy.
     def assert_false test, msg = nil
       msg = message(msg) { "Expected #{mu_pp(test)} to be false" }
-      assert test == false, msg
+      assert !test, msg
     end
 
     ##
